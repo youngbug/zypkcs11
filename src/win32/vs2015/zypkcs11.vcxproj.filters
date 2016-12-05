@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\pkcs11\debug.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\mutex.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\p11general.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\pkcs11\cryptoki.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\debug.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\mutex.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\p11general.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\pkcs11.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\pkcs11f.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\pkcs11t.h">
+      <Filter>header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{2231130d-a26f-4322-94b0-ce8c9d986d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{513c2a59-6ad5-4a9a-b0fd-3380d3982499}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
