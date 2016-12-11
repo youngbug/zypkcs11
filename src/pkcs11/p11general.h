@@ -35,4 +35,46 @@
 #define FUNC_FAILS(rc, msg) return (rc)
 #endif
 
+#define CALLER_UNKNOWN			0
+#define CALLER_FIREFOX			1
+
+/**
+* 所有可用的slot信息
+*
+*/
+struct p11SlotPool_t {
+	CK_ULONG numberOfSlots;         /**< slot池中slot数量         */
+	CK_SLOT_ID nextSlotID;          /**< 分配的下一个slot ID     */
+	struct p11Slot_t *list;         /**< 池中第一个slot的指针       */
+};
+
+
+
+/**
+*  会话信息
+*
+*/
+struct p11SessionPool_t {
+	CK_ULONG numberOfSessions;              /**< session的数量           */
+	CK_SESSION_HANDLE nextSessionHandle;    /**< 下一个分配的session的值 */
+	struct p11Session_t *list;              /**< 池中的第一个session的指针      */
+};
+
+struct p11Context_t {
+	CK_VERSION version;                     /**< cryptoki version       */
+	CK_INFO info;                           /**< cryptoki 信息       */
+	CK_HW_FEATURE_TYPE hw_feature;          /**< 硬件特征类型          */
+
+	int caller;                             /**< 调用应用                     */
+	//FILE *debugFileHandle;
+	struct p11SessionPool_t sessionPool;    /**< 会话池	                            */
+	struct p11SlotPool_t slotPool;          /**< 可用slot池                  */
+	void *mutex;                            /**< 互斥对象    */
+};
+
+CK_RV p11CreateMutex(CK_VOID_PTR_PTR ppMutex);
+CK_RV p11DestroyMutex(CK_VOID_PTR pMutex);
+CK_RV p11LockMutex(CK_VOID_PTR pMutex);
+CK_RV p11UnlockMutex(CK_VOID_PTR pMutex);
+
 #endif

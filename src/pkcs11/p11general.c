@@ -12,7 +12,45 @@
 #include "mutex.h"
 
 /*设置全局变量*/
+struct p11Context_t *context = NULL;
 static CK_C_INITIALIZE_ARGS initArgs;
+
+CK_RV p11CreateMutex(CK_VOID_PTR_PTR ppMutex)
+{
+	//CK_C_INITIALIZE_ARGS成员的CreateMutex和mutex.h中包含头文件的宏CreateMutex冲突了,需要undef一下
+	#undef CreateMutex		
+	if (initArgs.CreateMutex) {
+		return (*initArgs.CreateMutex)(ppMutex);
+	}
+	return CKR_OK;
+}
+
+
+CK_RV p11DestroyMutex(CK_VOID_PTR pMutex)
+{
+	if (initArgs.DestroyMutex) {
+		return (*initArgs.DestroyMutex)(pMutex);
+	}
+	return CKR_OK;
+}
+
+
+CK_RV p11LockMutex(CK_VOID_PTR pMutex)
+{
+	if (initArgs.LockMutex) {
+		return (*initArgs.LockMutex)(pMutex);
+	}
+	return CKR_OK;
+}
+
+
+CK_RV p11UnlockMutex(CK_VOID_PTR pMutex)
+{
+	if (initArgs.UnlockMutex) {
+		return (*initArgs.UnlockMutex)(pMutex);
+	}
+	return CKR_OK;
+}
 
 static CK_RV osCreateMutex(CK_VOID_PTR_PTR ppMutex)
 {
@@ -49,6 +87,42 @@ static CK_RV osUnlockMutex(CK_VOID_PTR pMutex)
 
 	return CKR_OK;
 }
+
+/**
+* Determine programm calling PKCS#11 module
+*/
+int determineCaller()
+{
+	char path[1024], *p;
+
+#ifdef _WIN32
+	GetModuleFileName(NULL, path, sizeof(path) - 1);
+#else
+	int r;
+
+	r = readlink("/proc/self/exe", path, sizeof(path) - 1);
+	if (r < 0) 
+	{
+
+		return CALLER_UNKNOWN;
+	}
+	path[r] = '\0';
+#endif
+
+	if ((p = strrchr(path, '/')) || (p = strrchr(path, '\\'))) {
+		p++;
+	}
+	else {
+		p = path;
+	}
+
+	if (!strncmp("firefox", p, 7) || !strncmp("iceweasel", p, 9)) {
+		return CALLER_FIREFOX;
+	}
+
+	return CALLER_UNKNOWN;
+}
+
 
 /*
 * Initialize the PKCS#11 function list.
@@ -165,6 +239,37 @@ CK_DECLARE_FUNCTION(CK_RV, C_Initialize)
 		initArgs.UnlockMutex = osUnlockMutex;
 	}
 	//
+	//初始化Cryptoki
+	if (context != NULL) 
+	{
+		return CKR_CRYPTOKI_ALREADY_INITIALIZED;
+	}
+
+	context = (struct p11Context_t *) calloc(1, sizeof(struct p11Context_t));
+
+	if (context == NULL) 
+	{
+		return CKR_HOST_MEMORY;
+	}
+
+	rv = p11CreateMutex(&context->mutex);
+	if (rv != CKR_OK)
+		return CKR_OK;
+
+	context->caller = determineCaller();
+
+	//初始化sessionPool
+	//initSessionPool(&context->sessionPool);
+
+	//rv = initSlotPool(&context->slotPool);
+
+	if (rv != CKR_OK) 
+	{
+		free(context);
+		context = NULL;
+		FUNC_RETURNS(rv);
+	}
+	//
 	FUNC_RETURNS(CKR_OK);
 }
 
@@ -176,6 +281,25 @@ CK_DECLARE_FUNCTION(CK_RV, C_Finalize)
 	CK_VOID_PTR   pReserved  /* reserved.  Should be NULL_PTR */
 )
 {
+	FUNC_CALLED();
+
+	if (context != NULL) 
+	{
+		p11LockMutex(context->mutex);
+
+		//terminateSessionPool(&context->sessionPool);
+		//terminateSlotPool(&context->slotPool);
+
+		p11UnlockMutex(context->mutex);
+
+		p11DestroyMutex(context->mutex);
+
+		free(context);
+		context = NULL;
+	}
+
+	context = NULL;
+
 	FUNC_RETURNS(CKR_OK);
 }
 
