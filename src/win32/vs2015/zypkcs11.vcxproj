@@ -149,11 +149,17 @@
     <ClInclude Include="..\..\pkcs11\pkcs11.h" />
     <ClInclude Include="..\..\pkcs11\pkcs11f.h" />
     <ClInclude Include="..\..\pkcs11\pkcs11t.h" />
+    <ClInclude Include="..\..\pkcs11\zyutility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\pkcs11\debug.c" />
     <ClCompile Include="..\..\pkcs11\mutex.c" />
+    <ClCompile Include="..\..\pkcs11\p11algorithm.c" />
     <ClCompile Include="..\..\pkcs11\p11general.c" />
+    <ClCompile Include="..\..\pkcs11\p11objects.c" />
+    <ClCompile Include="..\..\pkcs11\p11session.c" />
+    <ClCompile Include="..\..\pkcs11\p11slots.c" />
+    <ClCompile Include="..\..\pkcs11\zyutility.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

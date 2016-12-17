@@ -10,6 +10,7 @@
 */
 #include "p11general.h"
 #include "mutex.h"
+#include "zyutility.h"
 
 /*设置全局变量*/
 struct p11Context_t *context = NULL;
@@ -338,7 +339,7 @@ CK_DECLARE_FUNCTION(CK_RV, C_GetFunctionList)
 											 * function list */
 )
 {
-	if (!isValidPtr(ppFunctionList)) {
+	if ( NULL == ppFunctionList) {
 		return CKR_ARGUMENTS_BAD;
 	}
 

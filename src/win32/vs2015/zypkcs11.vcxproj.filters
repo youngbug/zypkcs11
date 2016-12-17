@@ -10,6 +10,21 @@
     <ClCompile Include="..\..\pkcs11\p11general.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\pkcs11\p11slots.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\p11session.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\p11objects.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\zyutility.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pkcs11\p11algorithm.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\pkcs11\cryptoki.h">
@@ -31,6 +46,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\pkcs11\pkcs11t.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pkcs11\zyutility.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
