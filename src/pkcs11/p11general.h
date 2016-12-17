@@ -38,6 +38,8 @@
 #define CALLER_UNKNOWN			0
 #define CALLER_FIREFOX			1
 
+#define VERSION_MAJOR     1
+#define VERSION_MINOR     0
 /**
 * 所有可用的slot信息
 *

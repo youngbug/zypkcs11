@@ -309,6 +309,24 @@ CK_DECLARE_FUNCTION(CK_RV, C_GetInfo)
 	CK_INFO_PTR   pInfo  /* location that receives information */
 )
 {
+	//1. 检查是否已经调用C_Initialize
+
+	//2.
+	memset(pInfo, 0, sizeof(CK_INFO));
+
+	pInfo->cryptokiVersion.major = VERSION_MAJOR;
+	pInfo->cryptokiVersion.minor = VERSION_MINOR;
+
+	strbpcpy(pInfo->manufacturerID, 
+			"Zhao Yang (cnrgc@163.com/sxzhaoyang@gmail.com)",	
+			sizeof(pInfo->manufacturerID));
+	//
+	strbpcpy(pInfo->libraryDescription,
+		"Crypto Library",
+		sizeof(pInfo->libraryDescription));
+	pInfo->libraryVersion.major = VERSION_MAJOR;
+	pInfo->libraryVersion.minor = VERSION_MINOR;
+
 	FUNC_RETURNS(CKR_OK);
 }
 
@@ -320,5 +338,11 @@ CK_DECLARE_FUNCTION(CK_RV, C_GetFunctionList)
 											 * function list */
 )
 {
+	if (!isValidPtr(ppFunctionList)) {
+		return CKR_ARGUMENTS_BAD;
+	}
+
+	*ppFunctionList = &pkcs11_function_list;
+
 	FUNC_RETURNS(CKR_OK);
 }
